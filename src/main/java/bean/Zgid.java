@@ -14,7 +14,6 @@ public class Zgid {
     private String UUID;
     private String EVENT_ID;
     private String BEGIN_DATE;
-    private String BEGIN_TIME_ID;
     private String DEVICE_ID;
     private String USER_ID;
     private String EVENT_NAME;
@@ -26,7 +25,6 @@ public class Zgid {
     private String CHANNEL;
     private String APP_VERSION;
     private String IP;
-    private String IP_STR;
     private String COUNTRY;
     private String AREA;
     private String CITY;
@@ -41,7 +39,21 @@ public class Zgid {
     private String UTM_TERM;
     private String DURATION;
     private String ATTR5;
-    private String ORIG_JSON;
+    private String CUS1 ;
+    private String CUS2 ;
+    private String CUS3 ;
+    private String CUS4 ;
+    private String CUS5 ;
+    private String CUS6 ;
+    private String CUS7 ;
+    private String CUS8 ;
+    private String CUS9 ;
+    private String CUS10 ;
+    private String CUS11 ;
+    private String CUS12 ;
+    private String CUS13 ;
+    private String CUS14 ;
+    private String CUS15 ;
 
 
 }

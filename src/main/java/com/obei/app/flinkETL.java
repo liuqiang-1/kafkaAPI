@@ -15,7 +15,11 @@ import org.apache.flink.util.Collector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author qiang
@@ -86,16 +90,104 @@ public class flinkETL {
         String utm_source = "";
         String utm_medium = "";
         String utm_campaign = "";
-        String tm_term = "";
+        String utm_content = "";
+        String utm_term = "";
         String duration = ""; //会话持续时间暂时未知
-        String attr5 = device_id +"_"+ session_id ; //会话持续时间暂时未知
+        String attr5 = device_id +"_"+ session_id ;
+        String cus1 = "" ;
+        String cus2 = "" ;
+        String cus3 = "" ;
+        String cus4 = "" ;
+        String cus5 = "" ;
+        String cus6 = "" ;
+        String cus7 = "" ;
+        String cus8 = "" ;
+        String cus9 = "" ;
+        String cus10 = "" ;
+        String cus11 = "" ;
+        String cus12 = "" ;
+        String cus13 = "" ;
+        String cus14 = "" ;
+        String cus15 = "" ;
 
-//        connection.prepareStatement()
 
-        return new Zgid();
+        //列名和值的集合
+        HashMap<String, String> map = new HashMap<>();
+
+        PreparedStatement preparedStatement = connection.prepareStatement("select  EVENT_ID,ATTR_NAME,COLUMN_NAME from ODS_EVENT_attr where event_id=3");
+        ResultSet resultSet = preparedStatement.executeQuery();
+//        $zg_epid#_  + 对应的 ATTR_NAME 作为key
+        while (resultSet.next()) {
+          String column_name = resultSet.getString(3);
+
+          String vaule = nObject.getString("&zg_epid#_" + column_name);
+          map.put(column_name,vaule);
+        }
+
+        //遍历这个map拿到所有的列名和值
+        Set<String> set=map.keySet();
+        for(String key:set){
+          String value=map.get(key);
+          switch (key) {
+            case "cus1":
+              cus1 = value;
+              break;
+            case "cus2":
+              cus2 = value;
+              break;
+            case "cus3":
+              cus3 = value;
+              break;
+            case "cus4":
+              cus4 = value;
+              break;
+            case "cus5":
+              cus5 = value;
+              break;
+            case "cus6":
+              cus6 = value;
+              break;
+            case "cus7":
+              cus7 = value;
+              break;
+            case "cus8":
+              cus8 = value;
+              break;
+            case "cus9":
+              cus9 = value;
+              break;
+            case "cus10":
+              cus10 = value;
+              break;
+            case "cus11":
+              cus11 = value;
+              break;
+            case "cus12":
+              cus12 = value;
+              break;
+            case "cus13":
+              cus13 = value;
+              break;
+            case "cus14":
+              cus14 = value;
+              break;
+            default:
+              cus15 = value;
+              break;
+          }
+
+
+        }
+        return new Zgid(zg_id,session_id,uuid,zg_eid,begin_date,device_id,user_id,event_name,
+                        platform,useragent,website,current_url,referrer_url,channel,app_version,ip,country,city,os,ov,bs,bv,
+                        utm_source,utm_medium,utm_campaign,utm_content,utm_term,attr5,duration,attr5,cus1,cus2 ,cus3 ,cus4, cus5, cus6, cus7, cus8, cus9, cus10,cus11,cus12,cus13,cus14,cus15);
       }
     });
 
+
+
+
+    mapStream.print();
     //执行
     env.execute();
   }

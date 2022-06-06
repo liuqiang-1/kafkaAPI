@@ -12,12 +12,14 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.util.Collector;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -30,11 +32,13 @@ public class flinkETL {
     //1.配置flink环境
     StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
     //2.配置Kafka策略，初始化属性
+    //2.配置Kafka策略，初始化属性
     Properties prop = new Properties();
     prop.setProperty("bootstrap.servers","10.80.79.3:9092");
-    prop.setProperty("group.id","test");
-    prop.setProperty("auto.offset.reset","latest");
-    prop.setProperty("enable.auto.commit","true");
+    prop.setProperty("group.id","tes11");
+    prop.setProperty("auto.offset.reset","earliest");
+    prop.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+    prop.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
     FlinkKafkaConsumer kafkaSource = new FlinkKafkaConsumer("pay_zg_total", new SimpleStringSchema(), prop);
     //添加Kafka数据源,获取dataStream做etl处理
     DataStreamSource kafkaSteam = env.addSource(kafkaSource);
@@ -110,20 +114,20 @@ public class flinkETL {
         String cus14 = "" ;
         String cus15 = "" ;
 
-
         //列名和值的集合
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
 
         PreparedStatement preparedStatement = connection.prepareStatement("select  EVENT_ID,ATTR_NAME,COLUMN_NAME from ODS_EVENT_attr where event_id=3");
         ResultSet resultSet = preparedStatement.executeQuery();
 //        $zg_epid#_  + 对应的 ATTR_NAME 作为key
         while (resultSet.next()) {
           String column_name = resultSet.getString(3);
+          String attr_name = resultSet.getString(2);
 
-          String vaule = nObject.getString("&zg_epid#_" + column_name);
+          String vaule = nObject.getString("&zg_epid#_" + attr_name);
           map.put(column_name,vaule);
         }
-
+        preparedStatement.close();
         //遍历这个map拿到所有的列名和值
         Set<String> set=map.keySet();
         for(String key:set){
@@ -176,6 +180,8 @@ public class flinkETL {
               break;
           }
 
+          System.out.println("======================");
+          System.out.println(key +"  =  "+ value);
 
         }
         return new Zgid(zg_id,session_id,uuid,zg_eid,begin_date,device_id,user_id,event_name,
@@ -188,6 +194,7 @@ public class flinkETL {
 
 
     mapStream.print();
+    connection.close();
     //执行
     env.execute();
   }

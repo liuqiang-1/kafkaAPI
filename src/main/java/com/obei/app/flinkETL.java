@@ -90,7 +90,7 @@ public class flinkETL {
         String duration = ""; //会话持续时间暂时未知
         String attr5 = device_id +"_"+ session_id ; //会话持续时间暂时未知
 
-        connection.prepareStatement()
+//        connection.prepareStatement()
 
         return new Zgid();
       }

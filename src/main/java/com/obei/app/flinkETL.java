@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.obei.bean.Zgid;
 import com.obei.func.DimAsyncFunction;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.io.ParseException;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.api.datastream.AsyncDataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -15,7 +16,6 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 
-import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +31,7 @@ public class flinkETL {
     //2.配置Kafka策略，初始化属性
     Properties prop = new Properties();
     prop.setProperty("bootstrap.servers","10.80.79.3:9092");
-    prop.setProperty("group.id","te2131");
+    prop.setProperty("group.id","tedsadsada");
     prop.setProperty("auto.offset.reset","earliest");
     prop.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
     prop.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
@@ -47,8 +47,8 @@ public class flinkETL {
       @Override
       public void processElement(String str, Context context, Collector<String> out) throws Exception {
         try {
-          JSONObject data = JSON.parseObject(str).getJSONArray("data").getJSONObject(0);
-          if (data.getString("app_id") != "5")
+          Integer zgid = JSON.parseObject(str).getJSONArray("data").getJSONObject(0).getJSONObject("pr").getInteger("$zg_eid");
+          if (zgid!=null && zgid>=0)
             out.collect(str);
 
         } catch (Exception ignored) {
@@ -194,83 +194,13 @@ public class flinkETL {
     orderWideSingleOutputStreamOperator.print();
 
 
-
+//    mapStream.print();
     //执行
     env.execute();
 
 
 
 
-    /*
 
-    //列名和值的集合
-    Map<String, String> map = new HashMap<>();
-
-    PreparedStatement preparedStatement = connection.prepareStatement("select  EVENT_ID,ATTR_NAME,COLUMN_NAME from ODS_EVENT_attr ");
-    ResultSet resultSet = preparedStatement.executeQuery();
-//        $zg_epid#_  + 对应的 ATTR_NAME 作为key
-    while (resultSet.next()) {
-      String column_name = resultSet.getString(3);
-      String attr_name = resultSet.getString(2);
-
-      String vaule = nObject.getString("&zg_epid#_" + attr_name);
-      map.put(column_name,vaule);
-    }
-    preparedStatement.close();
-    //遍历这个map拿到所有的列名和值
-    Set<String> set=map.keySet();
-    for(String key:set){
-      String value=map.get(key);
-      switch (key) {
-        case "cus1":
-          cus1 = value;
-          break;
-        case "cus2":
-          cus2 = value;
-          break;
-        case "cus3":
-          cus3 = value;
-          break;
-        case "cus4":
-          cus4 = value;
-          break;
-        case "cus5":
-          cus5 = value;
-          break;
-        case "cus6":
-          cus6 = value;
-          break;
-        case "cus7":
-          cus7 = value;
-          break;
-        case "cus8":
-          cus8 = value;
-          break;
-        case "cus9":
-          cus9 = value;
-          break;
-        case "cus10":
-          cus10 = value;
-          break;
-        case "cus11":
-          cus11 = value;
-          break;
-        case "cus12":
-          cus12 = value;
-          break;
-        case "cus13":
-          cus13 = value;
-          break;
-        case "cus14":
-          cus14 = value;
-          break;
-        default:
-          cus15 = value;
-          break;
-      }
-
-
-
-    }*/
   }
 }

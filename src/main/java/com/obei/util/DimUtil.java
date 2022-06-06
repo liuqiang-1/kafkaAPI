@@ -25,7 +25,7 @@ public class DimUtil {
         }*/
 
         //构建查询语句
-        String querySql = "select EVENT_ID,ATTR_NAME,COLUMN_NAME from ODS_EVENT_attr"+" where EVENT_ID='" + key + "'";
+        String querySql = "select EVENT_ID,ATTR_NAME,COLUMN_NAME from ODS_EVENT_attr"+" where EVENT_ID=" + key ;
         System.out.println("QuerySql:" + querySql);
 
         //执行查询

@@ -1,4 +1,4 @@
-package bean;
+package com.obei.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

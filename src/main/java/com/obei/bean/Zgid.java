@@ -1,4 +1,4 @@
-package bean;
+package com.obei.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Zgid {
     //不要  字段  network   mccmnc  begin_time_id   begin_day_id utc_date
-    private String ZG_ID;
+    private int ZG_ID;
     private String SESSION_ID;
     private String UUID;
     private String EVENT_ID;
@@ -54,6 +54,9 @@ public class Zgid {
     private String CUS13 ;
     private String CUS14 ;
     private String CUS15 ;
+    //把pr 里面的json也封装进来
+    private String JSON_PR;
+
 
 
 }

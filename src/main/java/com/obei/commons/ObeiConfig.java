@@ -1,4 +1,4 @@
-package commons;
+package com.obei.commons;
 
 /**
  * @author qiang

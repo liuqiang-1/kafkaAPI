@@ -1,6 +1,7 @@
-package com.obei.app;
+package com.obei.test;
 
-import commons.ObeiConfig;
+
+import com.obei.commons.ObeiConfig;
 
 import java.sql.*;
 

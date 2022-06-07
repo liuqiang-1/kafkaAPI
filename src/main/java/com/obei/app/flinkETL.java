@@ -28,10 +28,9 @@ public class flinkETL {
     //1.配置flink环境
     StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
     //2.配置Kafka策略，初始化属性
-    //2.配置Kafka策略，初始化属性
     Properties prop = new Properties();
     prop.setProperty("bootstrap.servers","10.80.79.3:9092");
-    prop.setProperty("group.id","tedsadsada");
+    prop.setProperty("group.id","tedsakkkk");
     prop.setProperty("auto.offset.reset","earliest");
     prop.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
     prop.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
@@ -131,10 +130,12 @@ public class flinkETL {
                                           Map<String, String> map = new HashMap<>();
                                           for (int i = 0; i < queryList.size(); i++) {
                                             JSONObject jsonObject = queryList.get(i);
-                                            String attr_name = "&zg_epid#_" + jsonObject.getString("ATTR_NAME");
+                                            String attr_name = "_" + jsonObject.getString("ATTR_NAME");
 
                                             String key = jsonObject.getString("COLUMN_NAME");
+                                            System.out.println( "cus"+"=============="+key);
                                             String value = JSONObject.parseObject(input.getJSON_PR()).getString(attr_name);
+                                            System.out.println( "测试=============="+value);
                                             map.put(key, value);
                                           }
                                           Set<String> set=map.keySet();
